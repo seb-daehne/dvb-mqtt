@@ -19,8 +19,10 @@ jobs:
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
 
-    - name: Publish the Docker Images
+    - name: Publish the amd64 Docker Image
       run: docker push sebd/dvb-mqtt:latest
+    
+    - name: Publish the arm Docker Image
       run: docker push sebd/dvb-mqtt-rpi:latest
 
     - name: Logot of the DockerHub Registry
