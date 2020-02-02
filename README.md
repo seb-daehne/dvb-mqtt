@@ -1,13 +1,40 @@
 ## Request the DVB api for when the next tram departs for amd64
 
-configured via environment variables:
-```
-DVB_CITY="Dresden" 
-DVB_STATION="Karcherallee" 
-DVB_DIRECTION="Kleinzschachwitz" 
-MQTT_BROKER="tcp://mymqttserver:1883" 
-MQTT_TOPIC="tram_departure/2"
-```
-It will query the DVB api for the next Bus or Tram that leaves the given station and publishes the result as a json array to the given mqtt broker then wait for a minute and do the same again
 
-The container only consists out of the go binary (built for arm)
+configured via config file:
+
+config.json
+
+```
+{
+    "city" : "Dresden"
+    "mqttBroker" : "tcp://mymqqtserver:1883",
+    "mqttTopic" : "tram_depatures/dvb"
+
+    "trams" : [
+        {
+            "station" : "Karcherallee"
+            "destination" : "Kleinzschachwitz"
+            "id" : "2"
+            "description": "2 to work"
+        }
+    ] 
+
+}
+```
+It will iterate through the trams array and query the DVB api for the next Bus or Tram that leaves the given station and publishes the result as a json array to the given mqtt broker then wait for a minute and do the same again
+
+The json published to the mqtt broker looks like this:
+
+```
+{
+    "station":"Karcherallee",
+    "direction":"Kleinzschachwitz",
+    "time":"10",
+    "time_next":"23",
+    "tram":"2",
+    "description":"2 to work"
+}
+```
+
+The container only consists out of the go binary (built for amd64 or arm)
