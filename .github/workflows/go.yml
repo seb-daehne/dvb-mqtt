@@ -1,0 +1,27 @@
+name: Build Container
+on: [push]
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Build amd64
+      run: go build -v .
+
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag sebd/dvb-mqtt:latest
+
+    - name: Login to DockerHub Registry
+      run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
+
+    - name: Publish the Docker Image
+      run: docker push sebd/dvb-mqtt:latest
+
+    - name: Logot of the DockerHub Registry
+      run: docker logout
+
