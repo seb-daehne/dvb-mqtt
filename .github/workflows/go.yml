@@ -3,7 +3,7 @@ on: [push]
 jobs:
 
   build:
-    name: Build
+    name: Docker Build and Publish
     runs-on: ubuntu-latest
     steps:
 

@@ -1,3 +1,4 @@
+
 ## Request the DVB api for when the next tram departs for amd64
 
 
@@ -9,7 +10,7 @@ config.json
 {
     "city" : "Dresden"
     "mqttBroker" : "tcp://mymqqtserver:1883",
-    "mqttTopic" : "tram_depatures/dvb"
+    "mqttTopicPrefix" : "tram_depatures/"
 
     "trams" : [
         {
@@ -22,7 +23,7 @@ config.json
 
 }
 ```
-It will iterate through the trams array and query the DVB api for the next Bus or Tram that leaves the given station and publishes the result as a json array to the given mqtt broker then wait for a minute and do the same again
+It will iterate through the trams array and query the DVB api for the next Bus or Tram that leaves the given station and publishes the result as a json array to the given mqtt broker and add the id to the topic then wait for a minute and do the same again
 
 The json published to the mqtt broker looks like this:
 

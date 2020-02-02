@@ -19,10 +19,10 @@ type Tram struct {
 }
 
 type Config struct {
-	City	 	string `json:"city"`
-	MqttBroker	string `json:"mqttBroker"`
-	MqttTopic 	string `json:"mqttTopic"`
-	Trams		[]Tram `json:"trams"`
+	City	 			string `json:"city"`
+	MqttBroker			string `json:"mqttBroker"`
+	MqttTopicPrefix 	string `json:"mqttTopicPrefix"`
+	Trams				[]Tram `json:"trams"`
 }
 
 type Departure struct {
@@ -99,9 +99,8 @@ func getDepartures(config Config) []Departure {
 
 func publishDepartures(config Config, departures []Departure) {
 	mqttBroker := config.MqttBroker
-	mqttTopic := config.MqttTopic
+	mqttTopicPrefix := config.MqttTopicPrefix
 
-	fmt.Println("\n + publish to: " + mqttBroker + "/" + mqttTopic)
 
 	// mqtt client
 	opts := MQTT.NewClientOptions()
@@ -115,6 +114,7 @@ func publishDepartures(config Config, departures []Departure) {
 	}
 
 	for _, departure :=  range departures {
+		fmt.Println("\n + publish to: " + mqttBroker + "/" + mqttTopicPrefix + departure.Tram)
 		fmt.Println("  - " + departure.Description + " ::> time: " + departure.Time + ", time_next: " + departure.TimeNext)
 		b, err := json.Marshal(departure)
 
@@ -122,7 +122,7 @@ func publishDepartures(config Config, departures []Departure) {
 			fmt.Println(err)
 			break
 		}
-		token := client.Publish(mqttTopic, 0, false, b)
+		token := client.Publish(mqttTopicPrefix + departure.Tram, 0, false, b)
 		token.Wait()
 	}
 
