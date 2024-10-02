@@ -1,4 +1,4 @@
-FROM golang:1.23.1 as builder
+FROM golang:1.23.2 as builder
 LABEL maintainer "Sebastian Daehne <daehne@rshc.de>"
 ENV GOOS=linux 
 ENV GOARCH=arm 
